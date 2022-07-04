@@ -32,7 +32,7 @@ private struct SaturationToggle: Identifiable {
     let value: Double = getNewOffsetValue()
     var isOn: Bool = false
     var color: Color {
-        get {Color(hue: 0, saturation: saturation, brightness: 0.5)}
+        get {Color(hue: baseHue, saturation: saturation, brightness: 0.5)}
         set {}
         
     }
@@ -43,7 +43,7 @@ private struct BrightnessToggle: Identifiable {
     let value: Double = getNewOffsetValue()
     var isOn: Bool = false
     var color: Color {
-        get {Color(hue: 0, saturation: 0, brightness: brightness)}
+        get {Color(hue: baseHue, saturation: 0.5, brightness: brightness)}
         set {}
         
     }
@@ -56,29 +56,47 @@ struct ContentView: View {
     @State var saturation: Double = 0.5
     @State var brightness: Double = 0.5
     
+    @State var toggleForceOn = true
+    
     func getHueStack() -> some View {
         return VStack {
             Spacer()
             Spacer()
             
             ForEach($hueToggles) { (hueToggle: Binding<HueToggle>) in
-                Toggle("", isOn: hueToggle.isOn)
-                    .labelsHidden()
-                    .tint(hueToggle.color.wrappedValue)
-                    .onChange(of: hueToggle.isOn.wrappedValue) { value in
-                        withAnimation(.interactiveSpring()) {
-                            changeColor()
+                ZStack {
+                    
+                    Rectangle()
+                        .mask() {
+                            Toggle("", isOn: $toggleForceOn)
+                                .labelsHidden()
+                                
                         }
+                        .foregroundColor(Color(hue: hue, saturation: saturation, brightness: brightness))
+                        .shadow(radius: 20)
+                    
+                    Toggle("", isOn: hueToggle.isOn)
+                        .labelsHidden()
+                        .tint(Color(hue: hueToggle.wrappedValue.hue, saturation: 0.5, brightness: 0.5))
+                        .onChange(of: hueToggle.isOn.wrappedValue) { value in
+                            withAnimation(.easeInOut) {
+                                changeColor()
+                            }
+                        }
+                        
+                        .contentShape(Rectangle())
+                        
                     }
                     .frame(maxWidth: 200, maxHeight: 60)
-                    .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation {
                             hueToggle.isOn.wrappedValue.toggle()
                             let impactMed = UIImpactFeedbackGenerator(style: .light)
                             impactMed.impactOccurred()
-                                        }
+                        }
                     }
+                
+                    
                 Spacer()
             }
             Spacer()
@@ -91,23 +109,42 @@ struct ContentView: View {
             Spacer()
             
             ForEach($saturationToggles) { (saturationToggle: Binding<SaturationToggle>) in
-                Toggle("", isOn: saturationToggle.isOn)
-                    .labelsHidden()
-                    .tint(saturationToggle.color.wrappedValue)
-                    .onChange(of: saturationToggle.isOn.wrappedValue) { value in
-                        withAnimation(.interactiveSpring()) {
-                            changeColor()
+                
+                ZStack(alignment: .center) {
+                    
+                    Rectangle()
+                        .mask() {
+                            Toggle("", isOn: $toggleForceOn)
+                                .labelsHidden()
+                                
                         }
+                        .foregroundColor(Color(hue: hue, saturation: saturation, brightness: brightness))
+                        .shadow(radius: 20)
+  
+                    
+                    Toggle("", isOn: saturationToggle.isOn)
+                        .labelsHidden()
+                        
+                        .tint(Color(hue: hue, saturation: saturationToggle.wrappedValue.saturation, brightness: 0.5))
+                        .onChange(of: saturationToggle.isOn.wrappedValue) { value in
+                            withAnimation(.easeInOut) {
+                                changeColor()
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        
                     }
                     .frame(maxWidth: 200, maxHeight: 60)
-                    .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation {
                             saturationToggle.isOn.wrappedValue.toggle()
                             let impactMed = UIImpactFeedbackGenerator(style: .light)
                             impactMed.impactOccurred()
-                                        }
+                        }
                     }
+
+                
+                    
                 
                 Spacer()
             }
@@ -121,23 +158,37 @@ struct ContentView: View {
             Spacer()
             
             ForEach($brightnessToggles) { (brightnessToggle: Binding<BrightnessToggle>) in
-                Toggle("", isOn: brightnessToggle.isOn)
-                    .labelsHidden()
-                    .tint(brightnessToggle.color.wrappedValue)
-                    .onChange(of: brightnessToggle.isOn.wrappedValue) { value in
-                        withAnimation(.interactiveSpring()) {
-                            changeColor()
+                ZStack {
+                    Rectangle()
+                        .mask() {
+                            Toggle("", isOn: $toggleForceOn)
+                                .labelsHidden()
+                                
                         }
+                        .foregroundColor(Color(hue: hue, saturation: saturation, brightness: brightness))
+                        .shadow(radius: 20)
+                    
+                    Toggle("", isOn: brightnessToggle.isOn)
+                        .labelsHidden()
+                        .tint(Color(hue: hue, saturation: 0.5, brightness: brightnessToggle.wrappedValue.brightness))
+                        .onChange(of: brightnessToggle.isOn.wrappedValue) { value in
+                            withAnimation(.easeInOut) {
+                                changeColor()
+                            }
+                        }
+                        
+                        .contentShape(Rectangle())
+                        
                     }
                     .frame(maxWidth: 200, maxHeight: 60)
-                    .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation {
                             brightnessToggle.isOn.wrappedValue.toggle()
                             let impactMed = UIImpactFeedbackGenerator(style: .light)
                             impactMed.impactOccurred()
-                                        }
+                        }
                     }
+                
                 Spacer()
                     
             }
@@ -228,16 +279,16 @@ struct ContentView: View {
 
     
     @State private var brightnessToggles: [BrightnessToggle] = [
-        BrightnessToggle(brightness: 0),
-        BrightnessToggle(brightness: 0.1),
-        BrightnessToggle(brightness: 0.2),
-        BrightnessToggle(brightness: 0.3),
-        BrightnessToggle(brightness: 0.4),
-        BrightnessToggle(brightness: 0.5),
-        BrightnessToggle(brightness: 0.6),
-        BrightnessToggle(brightness: 0.7),
-        BrightnessToggle(brightness: 0.8),
+        BrightnessToggle(brightness: 1),
         BrightnessToggle(brightness: 0.9),
+        BrightnessToggle(brightness: 0.8),
+        BrightnessToggle(brightness: 0.7),
+        BrightnessToggle(brightness: 0.6),
+        BrightnessToggle(brightness: 0.5),
+        BrightnessToggle(brightness: 0.4),
+        BrightnessToggle(brightness: 0.3),
+        BrightnessToggle(brightness: 0.2),
+        BrightnessToggle(brightness: 0.1),
     ]
 
     var body: some View {
