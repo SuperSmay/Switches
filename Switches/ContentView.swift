@@ -70,7 +70,7 @@ struct ContentView: View {
                             changeColor()
                         }
                     }
-                    .frame(width: 100, height: 60)
+                    .frame(maxWidth: 200, maxHeight: 60)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation {
@@ -79,7 +79,7 @@ struct ContentView: View {
                             impactMed.impactOccurred()
                                         }
                     }
-//                Spacer()
+                Spacer()
             }
             Spacer()
         }
@@ -99,7 +99,7 @@ struct ContentView: View {
                             changeColor()
                         }
                     }
-                    .frame(width: 100, height: 60)
+                    .frame(maxWidth: 200, maxHeight: 60)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation {
@@ -109,7 +109,7 @@ struct ContentView: View {
                                         }
                     }
                 
-//                Spacer()
+                Spacer()
             }
             Spacer()
         }
@@ -129,7 +129,7 @@ struct ContentView: View {
                             changeColor()
                         }
                     }
-                    .frame(width: 100, height: 60)
+                    .frame(maxWidth: 200, maxHeight: 60)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         withAnimation {
@@ -138,7 +138,7 @@ struct ContentView: View {
                             impactMed.impactOccurred()
                                         }
                     }
-//                Spacer()
+                Spacer()
                     
             }
             Spacer()
@@ -254,20 +254,23 @@ struct ContentView: View {
             
             HStack {
                 
-//                Spacer()
+                Spacer()
+                Spacer()
+                Spacer()
             
                 getHueStack()
                 
-//                Spacer()
+ 
                 
                 getSaturationStack()
                 
-//                Spacer()
+
                 
                 getBrightnessStack()
                 
-//                Spacer()
-                    
+                Spacer()
+                Spacer()
+                Spacer()
             }
             
             
