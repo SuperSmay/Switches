@@ -11,7 +11,7 @@ let baseHue = Double.random(in: 0...1)
 
 func getNewOffsetValue() -> Double {
     var value = Double.random(in: -0.5...0.5)
-    if abs(value) < 0.05 { value *= 2 }
+    while abs(value) < 0.05 { value *= 2 }
     return value
 }
 
@@ -22,7 +22,7 @@ private struct HueToggle: Identifiable {
     var isOn: Bool = false
     var color: Color {
         get {Color(hue: hue, saturation: 0.5, brightness: 0.5)}
-        set {print("Hi there")}
+        set {}
         
     }
     var id: Color { color }
@@ -150,14 +150,6 @@ struct ContentView: View {
             var value = baseHue
             for hueToggle in hueToggles {
                 if hueToggle.isOn {
-                    
-                    if value + hueToggle.value > 1 {
-                        value -= 0.5
-                    }
-                    
-                    else if value + hueToggle.value < 0 {
-                        value += 0.5
-                    }
                         
                     value += hueToggle.value
                     
